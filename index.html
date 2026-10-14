@@ -67,6 +67,8 @@ output{min-height:43px;font-weight:700}
 .tot{display:flex;justify-content:space-between;align-items:center;font-size:18px;margin-top:12px;padding-top:12px;border-top:2px solid var(--bd)}
 .bar{display:flex;gap:8px;flex-wrap:wrap}.bar .b{flex:1}
 .act{position:sticky;bottom:10px;z-index:10;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px 12px;box-shadow:0 8px 26px rgba(0,0,0,.18)}
+.b.wa{background:#128c7e;border-color:#128c7e;color:#fff}
+@media(max-width:560px){.act{flex-wrap:wrap}.act .tl{flex:1 0 100%}.act .b{flex:1;padding:11px 8px}}
 .act .tl{flex:1;min-width:0;line-height:1.2}.act .tl small{display:block;color:var(--mut);font-size:11px;letter-spacing:.8px;text-transform:uppercase}.act .tl b{font-size:18px;white-space:nowrap}
 .sv{border:1px solid var(--bd);border-left:4px solid var(--pri);border-radius:12px;background:var(--card);padding:12px;margin-bottom:10px}
 .sv.q{border-left-color:var(--red)}
@@ -124,8 +126,24 @@ output{min-height:43px;font-weight:700}
 #sheet .sg{padding-top:20px;align-self:flex-end;text-align:center;min-width:230px}
 #sheet .fo{font-weight:700;margin-bottom:6px}
 #sheet .ln{border-top:2px solid #232850;padding-top:4px;font-size:12px}
+#sheet.mp .sh-items{flex:none;min-height:0}#sheet.mp .sh-fill{display:none}#sheet.mp .sg{margin-top:auto}#sheet.mp .sg{padding-top:6px}#sheet.mp .sg img{height:42px!important}#sheet.mp .sg div[style*='height:56px']{height:32px!important}#sheet.mp .sh-tot{margin-top:4mm}#sheet.mp .sh-2{margin-top:4mm}
 #sheet .sh-ft{border-top:3px solid #9c2230;background:#232850;color:#aab0d4;text-align:center;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;padding:7px}
-@media print{body>*:not(#pv){display:none!important}#pv{position:static;background:none;padding:0}.tb{display:none}#sheet{zoom:1!important;margin:0}:root{padding:0}}
+@media print{#sheet tr,#sheet .sh-tot,#sheet .sh-2,#sheet .sg{break-inside:avoid;page-break-inside:avoid}#sheet thead{display:table-header-group}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}html,body{margin:0!important;padding:0!important;background:#fff!important;height:auto!important}body>*:not(#pv){display:none!important}#pv{position:static!important;inset:auto!important;overflow:visible!important;height:auto!important;background:none!important;padding:0!important}.tb{display:none!important}#sheet{zoom:1!important;margin:0!important;box-shadow:none!important;width:210mm!important}:root{padding:0}}
+/* ---------- cloud sync ---------- */
+#login{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;padding:20px;overflow:auto}
+#login[hidden]{display:none}
+#login form{width:100%;max-width:380px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.12)}
+#login .lg{background:#fff;border-radius:12px;padding:10px;text-align:center;margin-bottom:16px;border:1px solid var(--bd)}
+#login .lg img{height:62px;max-width:100%}
+#login h2{margin:0 0 3px;font-size:20px}
+#login p{margin:0 0 14px;color:var(--mut);font-size:13.5px}
+#login .err{color:#d33;font-size:13px;min-height:18px;margin:2px 0 10px}
+#login .b{width:100%}
+#login .lnk{display:block;margin:12px auto 0}
+.sync{font-size:12px;color:#aab0d4;padding:2px 6px 12px;line-height:1.35;word-break:break-all}
+.sync .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#7a809e;margin-right:6px}
+.sync .dot.on{background:#3ecf8e}
+.sync button{background:none;border:0;color:#fff;text-decoration:underline;font-size:12px;padding:0;margin-left:6px}
 </style></head><body>
 <div id="shell">
 <aside id="side"></aside>
@@ -135,8 +153,51 @@ output{min-height:43px;font-weight:700}
 </div>
 </div>
 <div id="scrim" onclick="menu(false)"></div>
+<div id="login" hidden><form onsubmit="return doLogin(event)" autocomplete="on"><div class="lg" id="lgl"></div>
+<h2>Sign in</h2><p>Sign in to sync invoices and quotations across your devices.</p>
+<label>Email<input name="em" type="email" autocomplete="username" required></label>
+<label>Password<input name="pw" type="password" autocomplete="current-password" required></label>
+<div class="err" id="lerr"></div>
+<button class="b p" type="submit">Sign in</button>
+<button class="lnk" type="button" onclick="useOffline()">Continue without cloud sync (this device only)</button></form></div>
 <div id="pv" hidden></div><div id="toast" hidden></div><div id="wab" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,setDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBOrCDS5txmcVtBBOefeTHBarfb1VvQFWA",
+  authDomain: "mr-duct.firebaseapp.com",
+  projectId: "mr-duct",
+  storageBucket: "mr-duct.firebasestorage.app",
+  messagingSenderId: "686627807376",
+  appId: "1:686627807376:web:45c821cd4bf34a3574f815",
+  measurementId: "G-S60YE3MFG8"
+};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
+let stops=[];
+const clean=o=>JSON.parse(JSON.stringify(o));
+window.CLOUD={user:null,
+ login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
+ logout:()=>signOut(auth),
+ saveDoc:d=>setDoc(doc(db,'invoices',String(d.id)),clean(d)),
+ delDoc:id=>deleteDoc(doc(db,'invoices',String(id))),
+ saveCfg:(k,o)=>setDoc(doc(db,'config',k),clean(o))};
+onAuthStateChanged(auth,u=>{
+ stops.forEach(f=>f());stops=[];
+ CLOUD.user=u?{email:u.email,uid:u.uid}:null;
+ if(u){
+  stops.push(onSnapshot(collection(db,'invoices'),s=>window.cloudDocs(s.docs.map(x=>x.data())),e=>window.cloudErr(e)));
+  stops.push(onSnapshot(collection(db,'config'),s=>{const o={};s.forEach(x=>o[x.id]=x.data());window.cloudCfg(o,s.metadata.hasPendingWrites)},e=>window.cloudErr(e)));
+ }
+ window.cloudChanged();
+});
+</script>
+
 <script>
 const $=s=>document.querySelector(s);
 const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -146,8 +207,9 @@ it:'100% payment within 7 days of invoice date.',inn:'Thank you for your busines
 qt:'50% advance with order, balance on completion.',qnn:'This quotation is valid for 30 days.'};
 let S={set:{},docs:[]};
 try{const o=JSON.parse(localStorage.getItem('mrd')||'null');if(o)S=Object.assign(S,o)}catch(e){}
-S.set=Object.assign({},D,S.set);
-const sv=()=>{try{localStorage.setItem('mrd',JSON.stringify(S))}catch(e){}};
+S.set=Object.assign({},D,S.set);S.q=S.q||{};
+const loc=()=>{try{localStorage.setItem('mrd',JSON.stringify(S))}catch(e){}};
+const sv=()=>{loc();pushSetSoon()};
 const pad=n=>String(n).padStart(4,'0');
 const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const fmt=n=>Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -179,11 +241,15 @@ h:'<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a
 s:'<svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>'};
 const NAMES={i:'Invoice',q:'Quotation',h:'Saved',s:'Settings'};
 
-function render(){
-const bar=([k,v])=>`<button class="sb ${tab==k?'on':''}" onclick="go('${k}')">${IC[k]}<span>${v}</span>${k=='h'&&S.docs.length?`<em>${S.docs.length}</em>`:''}</button>`;
+function renderSide(){
+const bar=([k,v])=>`<button class="sb ${tab==k?'on':''}" onclick="go('${k}')">${IC[k]}<span>${v}</span>${k=='h'&&S.docs.length?`<em>${S.docs.length}</em>`:''}</button>`,
+c=window.CLOUD,
+sy=c?(c.user?`<span class="dot on"></span>Cloud sync on<br>${E(c.user.email)}<button onclick="CLOUD.logout()">Sign out</button>`:`<span class="dot"></span>This device only<button onclick="showLogin()">Sign in</button>`):`<span class="dot"></span>Local only (cloud not loaded)`;
 $('#side').innerHTML=`<div class="brand"><div class="lp">${logoSrc()?`<img src="${logoSrc()}" alt="${E(S.set.co)}">`:`<b>${E(S.set.co)}</b>`}</div><small>Invoice &amp; Quotation</small></div>
 <div class="sbh">Features</div>${[['i','Invoice'],['q','Quotation'],['h','Saved']].map(bar).join('')}
-<div class="foot">${bar(['s','Settings'])}</div>`;
+<div class="foot"><div class="sync">${sy}</div>${bar(['s','Settings'])}</div>`}
+function render(){
+renderSide();
 $('#ttl').textContent=NAMES[tab];
 const a=$('#app');
 if(tab=='i'||tab=='q')a.innerHTML=form();else if(tab=='h')a.innerHTML=hist();else a.innerHTML=sett();
@@ -206,7 +272,7 @@ ${i?`<label>Quotation / PO No.<input value="${E(d.ref)}" oninput="cur.ref=this.v
 <button class="lnk" onclick="useDef('terms')">Reset to default payment terms</button>
 <label style="margin-top:10px">Notes<textarea rows="3" oninput="cur.notes=this.value;cur.nt=1">${E(d.notes)}</textarea></label>
 <button class="lnk" onclick="useDef('notes')">Reset to default notes</button></div>
-<div class="act"><div class="tl"><small>Total</small><b id="tt2"></b></div><button class="b p" onclick="prev()">Preview / PDF</button><button class="b" onclick="save()">Save</button><button class="b" onclick="nw()">New</button></div>`}
+<div class="act"><div class="tl"><small>Total</small><b id="tt2"></b></div><button class="b p" onclick="prev()">Preview / PDF</button><button class="b wa" onclick="waF()">WhatsApp</button><button class="b" onclick="save()">Save</button><button class="b" onclick="nw()">New</button></div>`}
 function row(x,i){return`<div class="it"><div class="r1"><b>Item ${i+1}</b>${cur.items.length>1?`<button class="x" aria-label="Remove item" onclick="delI(${i})">✕</button>`:''}</div>
 <textarea rows="2" placeholder="Description" oninput="up(${i},'d',this.value)">${E(x.d)}</textarea>
 <div class="g4"><label>Unit<input value="${E(x.u)}" oninput="up(${i},'u',this.value)"></label>
@@ -218,17 +284,20 @@ function up(i,k,v){cur.items[i][k]=v;upd()}
 function addI(){cur.items.push({d:'',u:'Nos',q:1,r:''});$('#its').innerHTML=cur.items.map(row).join('');upd()}
 function delI(i){cur.items.splice(i,1);$('#its').innerHTML=cur.items.map(row).join('');upd()}
 function useDef(k){cur[k]=S.set[DM[tab][k]];if(k=='terms')cur.tt=0;else cur.nt=0;render();toast('Default applied')}
-function save(q){const i=cur.t=='i',s=S.set;
-if(!cur.id){cur.id=Date.now();if(i)s.in++;else s.qn++}
+function save(q){const i=cur.t=='i',s=S.set;let bumped=0;
+if(!cur.id){
+ if(S.docs.some(x=>x.t==cur.t&&x.no==cur.no)){const p=i?s.ip:s.qp,used=new Set(S.docs.filter(x=>x.t==cur.t).map(x=>x.no));let n=i?s.in:s.qn;while(used.has(p+pad(n)))n++;cur.no=p+pad(n);if(i)s.in=n;else s.qn=n;bumped=1}
+ cur.id=Date.now();if(i)s.in++;else s.qn++}
 const c=JSON.parse(JSON.stringify(cur)),k=S.docs.findIndex(d=>d.id==c.id);
-if(k>=0)S.docs[k]=c;else S.docs.push(c);sv();if(!q){toast('Saved');render()}}
+if(k>=0)S.docs[k]=c;else S.docs.push(c);sv();mark(c.id,'s');
+if(!q){toast(bumped?'Number was already used - saved as '+cur.no:'Saved',bumped?3500:0);render()}}
 function nw(){dr[tab]=null;cur=dr[tab]=newDoc(tab);render()}
 
 function hist(){const l=S.docs.slice().sort((a,b)=>b.id-a.id);
 return`<div class="ph"><h2>Saved documents</h2><p>${l.length} saved · stored on this device</p></div>`+(l.length?l.map(d=>`<div class="sv ${d.t=='q'?'q':''}"><div class="top"><div style="min-width:0"><span class="tag">${d.t=='i'?'INV':'QT'}</span><b>${E(d.no)}</b><br><small>${E(d.client||'—')} · ${d.date.split('-').reverse().join('-')}</small></div><div class="amt">${E(S.set.cur)} ${fmt(tot(d))}</div></div>
 <div class="bar"><button class="b s" onclick="openD(${d.id})">Edit</button><button class="b s" onclick="pdfD(${d.id})">PDF</button><button class="b s" onclick="waD(${d.id})">WhatsApp</button><button class="b s" id="d${d.id}" onclick="delD(${d.id})">Delete</button></div></div>`).join(''):'<div class="card">No saved documents yet.</div>')}
 function openD(id){const d=S.docs.find(x=>x.id==id);dr[d.t]=JSON.parse(JSON.stringify(d));go(d.t);toast('Editing '+d.no+' - tap Save to update')}
-function delD(id){const b=$('#d'+id);if(b.dataset.s){S.docs=S.docs.filter(x=>x.id!=id);sv();render()}else{b.dataset.s=1;b.textContent='Sure?'}}
+function delD(id){const b=$('#d'+id);if(b.dataset.s){S.docs=S.docs.filter(x=>x.id!=id);sv();mark(id,'d');render()}else{b.dataset.s=1;b.textContent='Sure?'}}
 
 function sigSet(v){S.set.sig=v;sv();render();toast('Signature updated')}
 function sigUp(inp){const f=inp.files[0];if(!f)return;const im=new Image();im.onload=()=>{const w=Math.min(500,im.width),c=document.createElement('canvas');c.width=w;c.height=Math.round(im.height*w/im.width);c.getContext('2d').drawImage(im,0,0,c.width,c.height);sigSet(c.toDataURL('image/png'))};im.src=URL.createObjectURL(f)}
@@ -266,12 +335,31 @@ ${i?`<div class="sg"><div class="fo">For ${E(s.co)}</div>${sigSrc()?`<img src="$
 
 const fnb=d=>(d.no||'document').replace(/[\\/:*?"<>|]/g,'-');
 const getD=id=>id?S.docs.find(x=>x.id==id):cur;
+function waF(){save(true);waD()}
 function pr(){const t=document.title;document.title=fnb(cur);window.print();setTimeout(()=>document.title=t,1500)}
+const PGH=1122.8;
+function paginate(el){
+ const T=()=>el.getBoundingClientRect().top,rel=n=>n.getBoundingClientRect().top-T(),GAP=16,hdr=el.querySelector('thead tr');
+ const fix=(n,row)=>{const t=rel(n),ht=n.getBoundingClientRect().height,k=Math.floor(t/PGH);
+  if(t+ht<=(k+1)*PGH-GAP||ht>PGH-2*GAP)return;
+  const gap=(k+1)*PGH-t+GAP;
+  if(row){const sp=document.createElement('tr');sp.innerHTML=`<td colspan="6" style="height:${gap}px;padding:0;border:0"></td>`;n.before(sp);
+   if(hdr){const hr=document.createElement('tr');hr.innerHTML=[...hdr.children].map(c=>`<td style="background:#232850;color:#fff;font-size:10.5px;letter-spacing:.8px;font-weight:600;padding:7px 8px;text-align:${c.classList.contains('n')?'right':'left'}">${c.innerHTML}</td>`).join('');n.before(hr)}}
+  else{const sp=document.createElement('div');sp.style.height=gap+'px';n.before(sp)}};
+ el.querySelectorAll('tbody tr').forEach(tr=>fix(tr,1));
+ ['.sh-tot','.sh-2','.sg'].forEach(s=>{const n=el.querySelector(s);if(n)fix(n,0)})}
 async function mkPdf(d){
 if(!window.html2pdf)throw new Error('PDF engine did not load. Check internet and reload.');
 const el=document.createElement('div');el.id='sheet';el.innerHTML=sheet(d);
-const w=document.createElement('div');w.style.cssText='position:fixed;left:-10000px;top:0';w.appendChild(el);document.body.appendChild(w);
-try{return await html2pdf().set({margin:0,image:{type:'jpeg',quality:.95},html2canvas:{scale:2,scrollX:0,scrollY:0,windowWidth:794},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy']}}).from(el).outputPdf('blob')}finally{w.remove()}}
+el.style.cssText='margin:0;zoom:1;width:794px;min-height:1122px';
+const w=document.createElement('div');w.style.cssText='position:absolute;left:0;top:0;width:794px;z-index:-1;pointer-events:none';w.appendChild(el);document.body.appendChild(w);
+try{let n=1;
+ if(el.scrollHeight>PGH+2){el.classList.add('mp');el.style.minHeight='0';paginate(el);
+  let H=el.scrollHeight;const ft=el.querySelector('.sh-ft'),fh=ft?ft.offsetHeight:0;n=Math.ceil((H-1)/PGH);
+  if(ft&&n>1&&H-fh<=(n-1)*PGH+2){ft.style.display='none';H=el.scrollHeight;n=Math.ceil((H-1)/PGH)}
+  el.style.minHeight=(n*PGH-4)+'px'}
+ const sc=n<=3?2:(n<=5?1.5:1.2);
+ return await html2pdf().set({margin:0,image:{type:'jpeg',quality:.95},html2canvas:{scale:sc,x:0,y:0,scrollX:0,scrollY:0,width:794,windowWidth:794,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css']}}).from(el).outputPdf('blob')}finally{w.remove()}}
 async function saveBlob(b,d){const name=fnb(d)+'.pdf';let dl=null;
 try{dl=window.claude&&await claude.use('downloads')}catch(e){}
 if(dl){await dl.save({filename:name,data:b});return}
@@ -288,6 +376,52 @@ const f=new File([b],fnb(d)+'.pdf',{type:'application/pdf'});
 try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:d.no});return}}catch(e){if(e&&e.name=='AbortError')return}
 try{await saveBlob(b,d)}catch(e){if(e&&e.code=='declined')return;toast('PDF failed: '+errM(e),4500);return}
 const w=$('#wab');w.innerHTML=`<span>PDF saved. Open WhatsApp and attach it.</span><a href="${waLink(d)}" target="_blank" rel="noopener">Open WhatsApp</a><button onclick="this.parentNode.hidden=true">✕</button>`;w.hidden=false}
-function prev(){save(true);$('#pv').innerHTML=`<div class="tb"><button class="b p s" onclick="pr()">Print</button><button class="b s" onclick="pdfD()">Download PDF</button><button class="b s" onclick="waD()">WhatsApp</button><button class="b s" onclick="$('#pv').hidden=true">Close</button></div><div id="sheet">${sheet(cur)}</div>`;$('#pv').hidden=false;$('#sheet').style.zoom=Math.min(1,(innerWidth-20)/794)}
+function prev(){save(true);$('#pv').innerHTML=`<div class="tb"><button class="b p s" onclick="pr()">Print</button><button class="b s" onclick="pdfD()">Download PDF</button><button class="b s wa" onclick="waD()">Share on WhatsApp</button><button class="b s" onclick="$('#pv').hidden=true">Close</button></div><div id="sheet">${sheet(cur)}</div>`;$('#pv').hidden=false;$('#sheet').style.zoom=Math.min(1,(innerWidth-20)/794)}
+
+/* ---------- cloud sync (Firebase) ---------- */
+const cloud=()=>window.CLOUD&&CLOUD.user?CLOUD:null;
+let offline=false;
+const sq={};let sn=0;
+function push(id){const c=cloud();if(!c)return;const a=S.q[id];if(!a)return;const my=sq[id]=++sn,d=S.docs.find(x=>x.id==id);
+ const p=a=='d'?c.delDoc(id):(d?c.saveDoc(d):Promise.resolve());
+ p.then(()=>{if(sq[id]===my){delete S.q[id];loc()}}).catch(cerr)}
+function mark(id,a){S.q[id]=a;loc();push(id)}
+function cerr(e){const k=e&&e.code||'';toast(k=='permission-denied'?'Cloud blocked by Firestore rules - check the rules in Firebase console':'Cloud sync error: '+(k||errM(e)),4500)}
+window.cloudErr=cerr;
+const parts=()=>{const {sig,logo,...rest}=S.set;return{company:rest,signature:{v:sig||'none'},logo:{v:logo||'none'}}};
+let lastP={},pt=0;
+function pushSet(){const c=cloud();if(!c)return;const P=parts();for(const k in P){const j=JSON.stringify(P[k]);if(lastP[k]!==j){lastP[k]=j;c.saveCfg(k,P[k]).catch(e=>{lastP[k]=null;cerr(e)})}}}
+function pushSetSoon(){if(!cloud())return;clearTimeout(pt);pt=setTimeout(pushSet,900)}
+window.cloudDocs=function(l){
+ const m=new Map(l.map(d=>[String(d.id),d]));
+ if(!S.mig){S.docs.forEach(d=>S.q[d.id]='s');S.mig=1}
+ for(const [id,a] of Object.entries(S.q)){if(a=='d')m.delete(id);else{const d=S.docs.find(x=>x.id==id);if(d)m.set(id,d)}}
+ S.docs=[...m.values()];loc();
+ Object.keys(S.q).forEach(push);
+ if(tab=='h')render();else renderSide()};
+window.cloudCfg=function(o,pending){
+ if(!o.company){pushSet();return}
+ if(pending)return;
+ const keep={sig:S.set.sig,logo:S.set.logo};
+ S.set=Object.assign({},D,S.set,o.company,keep);
+ if(o.signature&&o.signature.v!=null)S.set.sig=o.signature.v;
+ if(o.logo&&o.logo.v!=null)S.set.logo=o.logo.v;
+ const P=parts();for(const k in P)lastP[k]=JSON.stringify(P[k]);
+ loc();
+ const ae=document.activeElement;
+ if(tab=='s'&&!(ae&&/INPUT|TEXTAREA/.test(ae.tagName)))render();else renderSide()};
+window.cloudChanged=function(){const c=window.CLOUD;
+ if(c&&!c.user)lastP={};
+ if(c&&c.user)offline=false;
+ $('#login').hidden=!c||!!c.user||offline;
+ $('#lgl').innerHTML=logoSrc()?`<img src="${logoSrc()}" alt="">`:`<b>${E(S.set.co)}</b>`;
+ renderSide()};
+function useOffline(){offline=true;$('#login').hidden=true;renderSide()}
+function showLogin(){offline=false;$('#login').hidden=false}
+const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'That email address is not valid.','auth/user-not-found':'No account with that email.','auth/wrong-password':'Wrong email or password.','auth/too-many-requests':'Too many attempts. Wait a few minutes and try again.','auth/network-request-failed':'No internet connection.','auth/operation-not-allowed':'Email/Password sign-in is not enabled in the Firebase console (Authentication > Sign-in method).','auth/user-disabled':'This account is disabled.'}[e&&e.code]||('Sign-in failed: '+(e&&e.code||errM(e))));
+async function doLogin(ev){ev.preventDefault();const f=ev.target,b=f.querySelector('button[type=submit]');$('#lerr').textContent='';b.disabled=true;b.textContent='Signing in…';
+ try{await CLOUD.login(f.em.value.trim(),f.pw.value);f.pw.value=''}catch(e){$('#lerr').textContent=authMsg(e)}
+ b.disabled=false;b.textContent='Sign in';return false}
+
 go('i');
 </script></body></html>
