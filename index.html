@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a1e3d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>MRS Ducting Contracts – Invoice &amp; Quotation</title>
 <style>
 :root{--bg:#eceef3;--card:#fff;--inp:#f4f5f9;--tx:#1b2033;--mut:#667086;--bd:#dadde8;--pri:#232850;--ptx:#fff;--side:#1a1e3d;--acc:#c0313f;--red:#9c2230;box-sizing:border-box}
@@ -11,8 +15,8 @@ body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-app
 button{font-family:inherit;cursor:pointer}
 
 /* ---------- shell: left sidebar with 3 feature bars ---------- */
-#shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
-aside{background:var(--side);color:#c9d0d8;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:calc(18px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));z-index:50;overflow-y:auto}
+#shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh;min-height:100dvh}
+aside{background:var(--side);color:#c9d0d8;position:sticky;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column;padding:calc(18px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));z-index:50;overflow-y:auto}
 .brand{padding:2px 4px 16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:16px}
 .brand .lp{background:#fff;border-radius:12px;padding:10px 14px;display:grid;place-items:center}
 .brand .lp img{display:block;width:100%;max-height:80px;object-fit:contain}
@@ -29,14 +33,15 @@ aside .foot .sb{background:none;margin:0}
 aside .foot .sb.on{background:rgba(255,255,255,.12)}
 #top{display:none}
 #scrim{display:none}
-@media(max-width:899px){
+@media(max-width:760px){
  #shell{grid-template-columns:1fr}
- aside{position:fixed;left:0;top:0;bottom:0;width:272px;transform:translateX(-102%);transition:transform .22s ease;box-shadow:6px 0 28px rgba(0,0,0,.35)}
+ aside{position:fixed;left:0;top:0;bottom:0;height:auto;width:min(300px,86vw);transform:translateX(-102%);transition:transform .22s ease;box-shadow:6px 0 28px rgba(0,0,0,.35);overscroll-behavior:contain}
  body.open aside{transform:none}
+ body.open{overflow:hidden}
  body.open #scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:45}
- #top{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:30;background:var(--side);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px}
+ #top{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:30;background:var(--side);color:#fff;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px}
  #top b{font-size:16px}
- #hb{border:0;background:rgba(255,255,255,.08);color:#fff;width:42px;height:42px;border-radius:10px;display:grid;place-items:center}
+ #hb{border:0;background:rgba(255,255,255,.1);color:#fff;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;flex:none}
  #hb svg{width:24px;height:24px;stroke:#fff;stroke-width:2.4;stroke-linecap:round;fill:none}
 }
 
@@ -54,7 +59,7 @@ input:focus,textarea:focus{outline:2px solid var(--pri);outline-offset:0;border-
 output{min-height:43px;font-weight:700}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .g4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(min-width:560px){.g4{grid-template-columns:.8fr .8fr 1fr 1.2fr}}
+@media(min-width:900px){.g4{grid-template-columns:.8fr .8fr 1fr 1.2fr}}
 @media(max-width:480px){.g2.keep{grid-template-columns:1fr}}
 .it{background:var(--inp);border:1px solid var(--bd);border-left:4px solid var(--pri);border-radius:10px;padding:10px;margin-bottom:10px}
 .it input,.it textarea,.it output{background:var(--card)}
@@ -68,7 +73,6 @@ output{min-height:43px;font-weight:700}
 .bar{display:flex;gap:8px;flex-wrap:wrap}.bar .b{flex:1}
 .act{position:sticky;bottom:10px;z-index:10;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px 12px;box-shadow:0 8px 26px rgba(0,0,0,.18)}
 .b.wa{background:#128c7e;border-color:#128c7e;color:#fff}
-@media(max-width:560px){.act{flex-wrap:wrap}.act .tl{flex:1 0 100%}.act .b{flex:1;padding:11px 8px}}
 .act .tl{flex:1;min-width:0;line-height:1.2}.act .tl small{display:block;color:var(--mut);font-size:11px;letter-spacing:.8px;text-transform:uppercase}.act .tl b{font-size:18px;white-space:nowrap}
 .sv{border:1px solid var(--bd);border-left:4px solid var(--pri);border-radius:12px;background:var(--card);padding:12px;margin-bottom:10px}
 .sv.q{border-left-color:var(--red)}
@@ -78,8 +82,8 @@ output{min-height:43px;font-weight:700}
 .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--pri);color:var(--ptx);margin-right:7px;letter-spacing:.5px}
 .sv.q .tag{background:var(--red);color:#fff}
 #wab{position:fixed;left:10px;right:10px;bottom:14px;background:#128c7e;color:#fff;padding:10px 12px;border-radius:12px;z-index:140;display:flex;gap:10px;align-items:center;justify-content:space-between;font-size:14px}
-#wab[hidden]{display:none}#wab a{color:#fff;font-weight:700}#wab button{background:none;border:0;color:#fff;font-size:18px}
-#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:88px;background:#222;color:#fff;padding:9px 16px;border-radius:20px;font-size:14px;z-index:150;max-width:90vw;text-align:center}
+#wab[hidden]{display:none}#wab a{color:#fff;font-weight:700;padding:10px 4px}#wab button{background:none;border:0;color:#fff;font-size:20px;min-width:44px;min-height:44px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:88px;background:#222;color:#fff;padding:10px 16px;border-radius:20px;font-size:14px;z-index:150;max-width:90vw;text-align:center}
 #pv{position:fixed;inset:0;background:#7f8790;overflow:auto;z-index:100;padding:10px}
 #pv[hidden],#toast[hidden]{display:none}
 .tb{display:flex;gap:8px;max-width:794px;margin:0 auto 10px}.tb .b{flex:1}
@@ -144,11 +148,64 @@ output{min-height:43px;font-weight:700}
 .sync .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#7a809e;margin-right:6px}
 .sync .dot.on{background:#3ecf8e}
 .sync button{background:none;border:0;color:#fff;text-decoration:underline;font-size:12px;padding:0;margin-left:6px}
+/* ---------- touch + mobile ---------- */
+#shell>div{min-width:0}.g2>*,.g4>*{min-width:0}input,textarea,output{min-width:0}
+body{-webkit-tap-highlight-color:transparent}
+button,.b,.sb,.x,.lnk,summary{touch-action:manipulation}
+.b:active,.sb:active{opacity:.85}
+.x{min-width:44px;min-height:44px;margin:-10px -10px -10px 0}
+.lnk{min-height:44px;display:inline-flex;align-items:center}
+.b.s{min-height:44px}
+input,textarea{min-height:44px}
+input[type=date]{-webkit-appearance:none;appearance:none}
+.act svg{display:none;width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.act .sh{display:none}
+#toptot{display:none}
+#sdot{display:none}
+#sdot{width:44px;height:44px;border:0;background:transparent;padding:0;flex:none;position:relative;--dc:#7a809e}
+#sdot::before{content:'';position:absolute;inset:15px;border-radius:50%;background:var(--dc);border:2px solid rgba(255,255,255,.35)}
+#sdot.on{--dc:#3ecf8e}#sdot.wait{--dc:#f5b942}#sdot.err{--dc:#ef4b5b}
+.sync .dot.err{background:#ef4b5b}.sync .dot.wait{background:#f5b942}
+.sync button{min-height:44px;padding:0 8px}
+.tag.pend{background:#f5b942;color:#3b2a00;margin-left:6px}
+@media(max-width:760px){
+ main{padding:12px 12px calc(18px + env(safe-area-inset-bottom,0px))}
+ .card{padding:13px;border-radius:12px;margin-bottom:12px}
+ .ph{margin-bottom:10px}.ph h2{font-size:21px}.ph p{font-size:13px}
+ .it{padding:9px}
+ .act{bottom:calc(8px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:6px;border-radius:16px}
+ .act .tl{display:none}
+ .act .b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:7px 2px;min-height:58px;font-size:11.5px;border-radius:12px;line-height:1.1}
+ .act svg{display:block}
+ .act .lg{display:none}.act .sh{display:inline}
+ #toptot{display:block;margin-left:auto;font-weight:700;font-size:15px;white-space:nowrap}
+ #top.nt #toptot{display:none}
+ #sdot{display:block}
+ #top.nt #sdot{margin-left:auto}
+ #toast,#wab{bottom:auto;top:calc(64px + env(safe-area-inset-top,0px))}
+ #wab{left:10px;right:10px}
+ .sv .bar{display:grid;grid-template-columns:1fr 1fr}
+ #pv{padding:0}
+ .tb{position:sticky;top:0;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:calc(6px + env(safe-area-inset-top,0px)) 8px 6px;margin:0;max-width:none;background:#5d646c}
+ #sheet{margin:0 auto}
+ #login{align-items:start;padding:calc(16px + env(safe-area-inset-top,0px)) 14px 16px}
+ #login form{margin-top:4vh;padding:18px}
+}
+@media(max-width:360px){.card{padding:11px}.ph h2{font-size:19px}.act .b{font-size:10.5px}}
+/* cloud settings card */
+.kvs{display:grid;gap:6px;margin-bottom:10px;font-size:14px}.kvs div{display:flex;justify-content:space-between;gap:10px}.kvs span{color:var(--mut)}.kvs b{text-align:right;word-break:break-all}
+.good{color:#1f9d6b}.bad{color:#d33}
+.note{font-size:13px;color:var(--mut);margin:8px 0;overflow-wrap:anywhere}
+.note.warn{color:#b45309;background:rgba(245,158,11,.13);padding:9px 11px;border-radius:8px}
+.dg{list-style:none;padding:0;margin:10px 0}.dg li{padding:7px 0;border-bottom:1px solid var(--bd);font-size:13.5px}.dg li.ok b{color:#1f9d6b}.dg li.no b{color:#d33}.dg span{display:block;color:var(--mut);word-break:break-word}
+details{margin-top:8px}summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center;color:var(--pri)}
+pre{background:var(--inp);border:1px solid var(--bd);border-radius:9px;padding:10px;font-size:12px;overflow:auto;white-space:pre;margin:8px 0}
+ol.st{margin:6px 0 8px 18px;padding:0;font-size:13.5px}ol.st li{margin-bottom:4px}
 </style></head><body>
 <div id="shell">
 <aside id="side"></aside>
 <div>
-<div id="top"><button id="hb" aria-label="Open menu" onclick="menu()"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><b id="ttl">MR Ducting</b></div>
+<div id="top"><button id="hb" aria-label="Open menu" onclick="menu()"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><b id="ttl">MR Ducting</b><span id="toptot"></span><button id="sdot" class="off" aria-label="Sync status" onclick="go('s')"></button></div>
 <main id="app"></main>
 </div>
 </div>
@@ -163,10 +220,6 @@ output{min-height:43px;font-weight:700}
 <div id="pv" hidden></div><div id="toast" hidden></div><div id="wab" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,setDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyBOrCDS5txmcVtBBOefeTHBarfb1VvQFWA",
   authDomain: "mr-duct.firebaseapp.com",
@@ -176,26 +229,37 @@ const firebaseConfig = {
   appId: "1:686627807376:web:45c821cd4bf34a3574f815",
   measurementId: "G-S60YE3MFG8"
 };
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
-let stops=[];
-const clean=o=>JSON.parse(JSON.stringify(o));
-window.CLOUD={user:null,
- login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
- logout:()=>signOut(auth),
- saveDoc:d=>setDoc(doc(db,'invoices',String(d.id)),clean(d)),
- delDoc:id=>deleteDoc(doc(db,'invoices',String(id))),
- saveCfg:(k,o)=>setDoc(doc(db,'config',k),clean(o))};
-onAuthStateChanged(auth,u=>{
- stops.forEach(f=>f());stops=[];
- CLOUD.user=u?{email:u.email,uid:u.uid}:null;
- if(u){
-  stops.push(onSnapshot(collection(db,'invoices'),s=>window.cloudDocs(s.docs.map(x=>x.data())),e=>window.cloudErr(e)));
-  stops.push(onSnapshot(collection(db,'config'),s=>{const o={};s.forEach(x=>o[x.id]=x.data());window.cloudCfg(o,s.metadata.hasPendingWrites)},e=>window.cloudErr(e)));
- }
- window.cloudChanged();
-});
+const B='https://www.gstatic.com/firebasejs/10.14.1/';
+try{
+ const [A,Au,Fs]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
+ const app=A.initializeApp(firebaseConfig),auth=Au.getAuth(app);
+ let db;try{db=Fs.initializeFirestore(app,{localCache:Fs.persistentLocalCache({tabManager:Fs.persistentMultipleTabManager()})})}catch(e){db=Fs.getFirestore(app)}
+ const clean=o=>JSON.parse(JSON.stringify(o)),stops=[];
+ const to=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(Object.assign(new Error('no answer within '+ms/1000+'s - offline, or the request is being blocked'),{code:'timeout'})),ms))]);
+ window.CLOUD={user:null,projectId:firebaseConfig.projectId,
+  login:(e,p)=>Au.signInWithEmailAndPassword(auth,e,p),
+  logout:()=>Au.signOut(auth),
+  saveDoc:d=>Fs.setDoc(Fs.doc(db,'invoices',String(d.id)),clean(d)),
+  delDoc:id=>Fs.deleteDoc(Fs.doc(db,'invoices',String(id))),
+  saveCfg:(k,o)=>Fs.setDoc(Fs.doc(db,'config',k),clean(o)),
+  async diag(){const out=[],u=auth.currentUser;
+   const step=async(name,fn)=>{try{out.push({name,ok:1,note:(await fn())||''})}catch(e){out.push({name,ok:0,code:e&&e.code||'',msg:e&&e.message||String(e)})}};
+   const probe=async col=>{const r=Fs.doc(db,col,'_diag');await to(Fs.setDoc(r,{_diag:1,t:Date.now()}),9000);Fs.deleteDoc(r).catch(()=>{});return 'allowed'};
+   await step('Signed in',async()=>{if(!u)throw Object.assign(new Error('not signed in'),{code:'no-user'});const t=await u.getIdTokenResult();return (t.claims.email||u.email)+' ('+(t.signInProvider||'password')+')'});
+   await step('Database reachable + read allowed',async()=>{await to(Fs.getDocFromServer(Fs.doc(db,'invoices','_diag')),9000);return 'ok'});
+   await step('Save to invoices',()=>probe('invoices'));
+   await step('Save to config (settings)',()=>probe('config'));
+   return {out}}};
+ Au.onAuthStateChanged(auth,u=>{
+  stops.splice(0).forEach(f=>f());
+  CLOUD.user=u?{email:u.email,uid:u.uid}:null;
+  if(u){
+   stops.push(Fs.onSnapshot(Fs.collection(db,'invoices'),s=>window.cloudDocs(s.docs.map(x=>x.data()),s.metadata.fromCache),e=>window.cloudErr(e)));
+   stops.push(Fs.onSnapshot(Fs.collection(db,'config'),s=>{const o={};s.forEach(x=>o[x.id]=x.data());window.cloudCfg(o,s.metadata.fromCache)},e=>window.cloudErr(e)));
+  }
+  window.cloudChanged();
+ });
+}catch(e){if(!window.CLOUD){window.CLOUD_ERR=String(e&&e.message||e);window.cloudChanged&&window.cloudChanged()}}
 </script>
 
 <script>
@@ -222,16 +286,22 @@ const w99=n=>n<20?ON[n]:TN[Math.floor(n/10)]+(n%10?' '+ON[n%10]:'');
 const w999=n=>[n>=100?ON[Math.floor(n/100)]+' Hundred':'',n%100?w99(n%100):''].filter(Boolean).join(' ');
 function words(n){if(n===0)return 'Zero';const o=[],cr=Math.floor(n/1e7);n%=1e7;const la=Math.floor(n/1e5);n%=1e5;const th=Math.floor(n/1e3);n%=1e3;
 if(cr)o.push(words(cr)+' Crore');if(la)o.push(w99(la)+' Lakh');if(th)o.push(w99(th)+' Thousand');if(n)o.push(w999(n));return o.join(' ')}
-function amtWords(v,c){const r=Math.round((+v||0)*100),rs=Math.floor(r/100),ps=r%100;
+function amtWords(v,c){let r=Math.round((+v||0)*100);const neg=r<0;r=Math.abs(r);const rs=Math.floor(r/100),ps=r%100;
 const U={'₹':['Rupee','Rupees','Paisa','Paise'],'$':['Dollar','Dollars','Cent','Cents'],'€':['Euro','Euros','Cent','Cents'],'£':['Pound','Pounds','Penny','Pence'],'AED':['Dirham','Dirhams','Fil','Fils']}[(c||'').trim()]||['','','',''];
-let t=(words(rs)+' '+U[rs==1?0:1]).trim();if(ps)t+=' and '+(words(ps)+' '+U[ps==1?2:3]).trim();return t+' Only'}
+let t=(words(rs)+' '+U[rs==1?0:1]).trim();if(ps)t+=' and '+(words(ps)+' '+U[ps==1?2:3]).trim();return (neg?'Minus ':'')+t+' Only'}
 
 function newDoc(t){const s=S.set,i=t=='i';return{id:null,t,no:i?s.ip+pad(s.in):s.qp+pad(s.qn),date:today(),client:'',caddr:'',ph:'',ref:'',
 items:[{d:'',u:'Nos',q:1,r:''}],terms:i?s.it:s.qt,notes:i?s.inn:s.qnn}}
-let tab='i',cur=null,dr={};
+let tab='i',cur=null,dr=S.dr||(S.dr={});
 const DM={i:{terms:'it',notes:'inn'},q:{terms:'qt',notes:'qnn'}};
 function toast(m,ms){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,ms||1800)}
-function menu(o){document.body.classList.toggle('open',o===undefined?!document.body.classList.contains('open'):o)}
+let hs=0;
+function hpush(){try{history.pushState({ov:1},'');hs++}catch(e){}}
+function hback(){if(hs>0){try{history.back()}catch(e){hs=0}}}
+function menu(o){const b=document.body,was=b.classList.contains('open'),now=o===undefined?!was:o;if(now===was)return;b.classList.toggle('open',now);if(now)hpush();else hback()}
+function closePv(){if($('#pv').hidden)return;$('#pv').hidden=true;hback()}
+function fitZoom(){const s=$('#sheet');if(s&&!$('#pv').hidden)s.style.zoom=Math.min(1,(innerWidth-(innerWidth<=760?0:20))/794)}
+addEventListener('popstate',()=>{if(hs>0){hs--;document.body.classList.remove('open');$('#pv').hidden=true}});
 function go(t){tab=t;menu(false);if(t=='i'||t=='q'){cur=dr[t]||(dr[t]=newDoc(t));if(!cur.id){if(!cur.tt)cur.terms=S.set[DM[t].terms];if(!cur.nt)cur.notes=S.set[DM[t].notes]}}render();scrollTo(0,0)}
 
 const IC={
@@ -240,17 +310,26 @@ q:'<svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><pa
 h:'<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
 s:'<svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>'};
 const NAMES={i:'Invoice',q:'Quotation',h:'Saved',s:'Settings'};
+const ICN={pv:'<svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>',
+wa:'<svg viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.7-5.2A8.5 8.5 0 1 1 21 12z"/></svg>',
+sv:'<svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7V3M8 21v-7h8v7"/></svg>',
+nw:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>'};
 
 function renderSide(){
 const bar=([k,v])=>`<button class="sb ${tab==k?'on':''}" onclick="go('${k}')">${IC[k]}<span>${v}</span>${k=='h'&&S.docs.length?`<em>${S.docs.length}</em>`:''}</button>`,
-c=window.CLOUD,
-sy=c?(c.user?`<span class="dot on"></span>Cloud sync on<br>${E(c.user.email)}<button onclick="CLOUD.logout()">Sign out</button>`:`<span class="dot"></span>This device only<button onclick="showLogin()">Sign in</button>`):`<span class="dot"></span>Local only (cloud not loaded)`;
+c=window.CLOUD,q=Object.keys(S.q).length;let sy;
+if(!c)sy=`<span class="dot"></span>Local only${window.CLOUD_ERR?' (cloud failed to load)':''}<button onclick="go('s')">Details</button>`;
+else if(!c.user)sy=`<span class="dot"></span>This device only<button onclick="showLogin()">Sign in</button>`;
+else if(SYNC.err)sy=`<span class="dot err"></span>Sync problem: ${E(SYNC.err.code)}<button onclick="go('s')">Fix</button>`;
+else sy=`<span class="dot ${q?'wait':'on'}"></span>${q?'Uploading '+q+'…':'Cloud sync on'}<br>${E(c.user.email)}<button onclick="CLOUD.logout()">Sign out</button>`;
 $('#side').innerHTML=`<div class="brand"><div class="lp">${logoSrc()?`<img src="${logoSrc()}" alt="${E(S.set.co)}">`:`<b>${E(S.set.co)}</b>`}</div><small>Invoice &amp; Quotation</small></div>
 <div class="sbh">Features</div>${[['i','Invoice'],['q','Quotation'],['h','Saved']].map(bar).join('')}
-<div class="foot"><div class="sync">${sy}</div>${bar(['s','Settings'])}</div>`}
+<div class="foot"><div class="sync">${sy}</div>${bar(['s','Settings'])}</div>`;
+const d=$('#sdot');if(d){d.className=!c||!c.user?'off':(SYNC.err?'err':(q?'wait':'on'));d.title=!c||!c.user?'Not synced':(SYNC.err?'Sync problem':(q?'Uploading':'Synced'))}}
 function render(){
 renderSide();
 $('#ttl').textContent=NAMES[tab];
+$('#top').classList.toggle('nt',!(tab=='i'||tab=='q'));
 const a=$('#app');
 if(tab=='i'||tab=='q')a.innerHTML=form();else if(tab=='h')a.innerHTML=hist();else a.innerHTML=sett();
 if(tab=='i'||tab=='q')upd()}
@@ -258,7 +337,7 @@ if(tab=='i'||tab=='q')upd()}
 function form(){const i=tab=='i',d=cur;return`
 <div class="ph"><h2>${d.id?'Editing '+E(d.no):(i?'New Invoice':'New Quotation')}</h2><p>${i?'Bill a client for completed ducting work.':'Prepare a price quote for a new job.'}</p></div>
 <div class="card"><h3>${i?'Invoice':'Quotation'} details</h3>
-<div class="g2"><label>${i?'Invoice':'Quotation'} No.<input value="${E(d.no)}" oninput="cur.no=this.value"></label>
+<div class="g2"><label>${i?'Invoice':'Quotation'} No.<input value="${E(d.no)}" oninput="cur.no=this.value;cur.nm=1"></label>
 <label>Date<input type="date" value="${d.date}" oninput="cur.date=this.value"></label></div>
 ${i?`<label>Quotation / PO No.<input value="${E(d.ref)}" oninput="cur.ref=this.value"></label>`:''}</div>
 <div class="card"><h3>Client</h3>
@@ -272,14 +351,14 @@ ${i?`<label>Quotation / PO No.<input value="${E(d.ref)}" oninput="cur.ref=this.v
 <button class="lnk" onclick="useDef('terms')">Reset to default payment terms</button>
 <label style="margin-top:10px">Notes<textarea rows="3" oninput="cur.notes=this.value;cur.nt=1">${E(d.notes)}</textarea></label>
 <button class="lnk" onclick="useDef('notes')">Reset to default notes</button></div>
-<div class="act"><div class="tl"><small>Total</small><b id="tt2"></b></div><button class="b p" onclick="prev()">Preview / PDF</button><button class="b wa" onclick="waF()">WhatsApp</button><button class="b" onclick="save()">Save</button><button class="b" onclick="nw()">New</button></div>`}
+<div class="act"><div class="tl"><small>Total</small><b id="tt2"></b></div><button class="b p" onclick="prev()">${ICN.pv}<span class="lg">Preview / PDF</span><span class="sh">Preview</span></button><button class="b wa" onclick="waF()">${ICN.wa}<span>WhatsApp</span></button><button class="b" onclick="save()">${ICN.sv}<span>Save</span></button><button class="b" onclick="nw()">${ICN.nw}<span>New</span></button></div>`}
 function row(x,i){return`<div class="it"><div class="r1"><b>Item ${i+1}</b>${cur.items.length>1?`<button class="x" aria-label="Remove item" onclick="delI(${i})">✕</button>`:''}</div>
 <textarea rows="2" placeholder="Description" oninput="up(${i},'d',this.value)">${E(x.d)}</textarea>
 <div class="g4"><label>Unit<input value="${E(x.u)}" oninput="up(${i},'u',this.value)"></label>
 <label>Qty<input type="number" inputmode="decimal" value="${E(x.q)}" oninput="up(${i},'q',this.value)"></label>
 <label>Rate<input type="number" inputmode="decimal" value="${E(x.r)}" oninput="up(${i},'r',this.value)"></label>
 <label>Amount<output id="a${i}"></output></label></div></div>`}
-function upd(){cur.items.forEach((x,i)=>{const o=$('#a'+i);if(o)o.textContent=fmt((+x.q||0)*(+x.r||0))});const t=S.set.cur+' '+fmt(tot(cur));$('#tt').textContent=t;$('#tt2').textContent=t}
+function upd(){cur.items.forEach((x,i)=>{const o=$('#a'+i);if(o)o.textContent=fmt((+x.q||0)*(+x.r||0))});const t=S.set.cur+' '+fmt(tot(cur));$('#tt').textContent=t;$('#tt2').textContent=t;$('#toptot').textContent=t}
 function up(i,k,v){cur.items[i][k]=v;upd()}
 function addI(){cur.items.push({d:'',u:'Nos',q:1,r:''});$('#its').innerHTML=cur.items.map(row).join('');upd()}
 function delI(i){cur.items.splice(i,1);$('#its').innerHTML=cur.items.map(row).join('');upd()}
@@ -293,28 +372,33 @@ if(k>=0)S.docs[k]=c;else S.docs.push(c);sv();mark(c.id,'s');
 if(!q){toast(bumped?'Number was already used - saved as '+cur.no:'Saved',bumped?3500:0);render()}}
 function nw(){dr[tab]=null;cur=dr[tab]=newDoc(tab);render()}
 
-function hist(){const l=S.docs.slice().sort((a,b)=>b.id-a.id);
-return`<div class="ph"><h2>Saved documents</h2><p>${l.length} saved · stored on this device</p></div>`+(l.length?l.map(d=>`<div class="sv ${d.t=='q'?'q':''}"><div class="top"><div style="min-width:0"><span class="tag">${d.t=='i'?'INV':'QT'}</span><b>${E(d.no)}</b><br><small>${E(d.client||'—')} · ${d.date.split('-').reverse().join('-')}</small></div><div class="amt">${E(S.set.cur)} ${fmt(tot(d))}</div></div>
+function hist(){const l=S.docs.slice().sort((a,b)=>b.id-a.id),cl=cloud();
+return`<div class="ph"><h2>Saved documents</h2><p>${l.length} saved · ${cl?'synced to your cloud account':'stored on this device'}</p></div>`+(l.length?l.map(d=>`<div class="sv ${d.t=='q'?'q':''}"><div class="top"><div style="min-width:0"><span class="tag">${d.t=='i'?'INV':'QT'}</span><b>${E(d.no)}</b>${cl&&S.q[d.id]=='s'?'<span class="tag pend">NOT UPLOADED YET</span>':''}<br><small>${E(d.client||'—')} · ${(d.date||'').split('-').reverse().join('-')}</small></div><div class="amt">${E(S.set.cur)} ${fmt(tot(d))}</div></div>
 <div class="bar"><button class="b s" onclick="openD(${d.id})">Edit</button><button class="b s" onclick="pdfD(${d.id})">PDF</button><button class="b s" onclick="waD(${d.id})">WhatsApp</button><button class="b s" id="d${d.id}" onclick="delD(${d.id})">Delete</button></div></div>`).join(''):'<div class="card">No saved documents yet.</div>')}
-function openD(id){const d=S.docs.find(x=>x.id==id);dr[d.t]=JSON.parse(JSON.stringify(d));go(d.t);toast('Editing '+d.no+' - tap Save to update')}
+function openD(id){const d=S.docs.find(x=>x.id==id);if(!d){toast('That document is no longer available');return}dr[d.t]=JSON.parse(JSON.stringify(d));go(d.t);toast('Editing '+d.no+' - tap Save to update')}
 function delD(id){const b=$('#d'+id);if(b.dataset.s){S.docs=S.docs.filter(x=>x.id!=id);sv();mark(id,'d');render()}else{b.dataset.s=1;b.textContent='Sure?'}}
 
 function sigSet(v){S.set.sig=v;sv();render();toast('Signature updated')}
-function sigUp(inp){const f=inp.files[0];if(!f)return;const im=new Image();im.onload=()=>{const w=Math.min(500,im.width),c=document.createElement('canvas');c.width=w;c.height=Math.round(im.height*w/im.width);c.getContext('2d').drawImage(im,0,0,c.width,c.height);sigSet(c.toDataURL('image/png'))};im.src=URL.createObjectURL(f)}
+function shrinkImg(inp,max,cb){const f=inp.files[0];if(!f)return;const im=new Image();
+ im.onload=()=>{let w=Math.min(max,im.width),u='';for(let i=0;i<8;i++){const c=document.createElement('canvas');c.width=w;c.height=Math.max(1,Math.round(im.height*w/im.width));c.getContext('2d').drawImage(im,0,0,c.width,c.height);u=c.toDataURL('image/png');if(u.length<350000)break;w=Math.max(60,Math.round(w*.7))}
+  URL.revokeObjectURL(im.src);inp.value='';if(u.length>=900000){toast('That image is too large - please choose a smaller one',4000);return}cb(u)};
+ im.onerror=()=>toast('Could not read that image file',3500);im.src=URL.createObjectURL(f)}
+function sigUp(inp){shrinkImg(inp,500,sigSet)}
 const sigSrc=()=>{const g=S.set.sig;return(g=='none'||!g)?'':g};
 const logoSrc=()=>{const g=S.set.logo;return g=='default'?LOGO:((g=='none'||!g)?'':g)};
 function logoSet(v){S.set.logo=v;sv();render();toast('Logo updated')}
-function logoUp(inp){const f=inp.files[0];if(!f)return;const im=new Image();im.onload=()=>{const w=Math.min(700,im.width),c=document.createElement('canvas');c.width=w;c.height=Math.round(im.height*w/im.width);c.getContext('2d').drawImage(im,0,0,c.width,c.height);logoSet(c.toDataURL('image/png'))};im.src=URL.createObjectURL(f)}
+function logoUp(inp){shrinkImg(inp,700,logoSet)}
 function sett(){const s=S.set,f=(l,k,n)=>`<label>${l}<input ${n?'type="number" min="1"':''} value="${E(s[k])}" oninput="S.set.${k}=${n?'+this.value||1':'this.value'};sv()"></label>`,
 t=(l,k)=>`<label>${l}<textarea rows="3" oninput="S.set.${k}=this.value;sv()">${E(s[k])}</textarea></label>`;
 return`<div class="ph"><h2>Settings</h2><p>Company details, numbering and default wording.</p></div>
+<div class="card" id="cloudCard">${cloudCardHTML()}</div>
 <div class="card"><h3>Company</h3>${f('Company name','co')}${f('Address (optional)','addr')}${f('Phone / email (optional)','contact')}${f('Currency symbol','cur')}</div>
 <div class="card"><h3>Logo</h3><div style="background:#fff;border:1px solid var(--bd);border-radius:9px;padding:10px;text-align:center;min-height:50px">${logoSrc()?`<img src="${logoSrc()}" style="height:70px;max-width:100%" alt="">`:'<small style="color:#777">No logo (company name is shown instead)</small>'}</div><label style="margin-top:10px">Upload logo image<input type="file" accept="image/*" onchange="logoUp(this)"></label><div class="bar"><button class="b s" onclick="logoSet('default')">Use MRS logo</button><button class="b s" onclick="logoSet('none')">Remove</button></div></div>
 <div class="card"><h3>Authorised signature (invoices)</h3><div style="background:#fff;border:1px solid var(--bd);border-radius:9px;padding:6px;text-align:center;min-height:50px">${sigSrc()?`<img src="${sigSrc()}" style="height:60px" alt="">`:'<small style="color:#777">No signature</small>'}</div><label style="margin-top:10px">Upload signature image<input type="file" accept="image/*" onchange="sigUp(this)"></label><div class="bar"><button class="b s" onclick="sigSet('none')">Remove</button></div></div>
 <div class="card"><h3>Numbering (auto)</h3><div class="g2">${f('Invoice prefix','ip')}${f('Next invoice no.','in',1)}${f('Quotation prefix','qp')}${f('Next quotation no.','qn',1)}</div></div>
 <div class="card"><h3>Default invoice text</h3>${t('Payment terms','it')}${t('Notes','inn')}</div>
 <div class="card"><h3>Default quotation text</h3>${t('Payment terms','qt')}${t('Notes','qnn')}</div>
-<p style="color:var(--mut);font-size:13px">Defaults apply to new documents. Data is stored in this browser on this device.</p>`}
+<p style="color:var(--mut);font-size:13px">Defaults apply to new documents. Data is kept on this device and, when you are signed in, also in your cloud account.</p>`}
 
 function sheet(d){const s=S.set,i=d.t=='i',c=s.cur,T=tot(d),dt=d.date.split('-').reverse().join('-');
 const info=[s.addr,s.contact].filter(x=>x&&x.trim()).join('\n'),lg=logoSrc(),W=[6,44,9,10,14,17];
@@ -376,52 +460,124 @@ const f=new File([b],fnb(d)+'.pdf',{type:'application/pdf'});
 try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:d.no});return}}catch(e){if(e&&e.name=='AbortError')return}
 try{await saveBlob(b,d)}catch(e){if(e&&e.code=='declined')return;toast('PDF failed: '+errM(e),4500);return}
 const w=$('#wab');w.innerHTML=`<span>PDF saved. Open WhatsApp and attach it.</span><a href="${waLink(d)}" target="_blank" rel="noopener">Open WhatsApp</a><button onclick="this.parentNode.hidden=true">✕</button>`;w.hidden=false}
-function prev(){save(true);$('#pv').innerHTML=`<div class="tb"><button class="b p s" onclick="pr()">Print</button><button class="b s" onclick="pdfD()">Download PDF</button><button class="b s wa" onclick="waD()">Share on WhatsApp</button><button class="b s" onclick="$('#pv').hidden=true">Close</button></div><div id="sheet">${sheet(cur)}</div>`;$('#pv').hidden=false;$('#sheet').style.zoom=Math.min(1,(innerWidth-20)/794)}
+function prev(){save(true);$('#pv').innerHTML=`<div class="tb"><button class="b p s" onclick="pr()">Print</button><button class="b s" onclick="pdfD()">Download PDF</button><button class="b s wa" onclick="waD()">Share on WhatsApp</button><button class="b s" onclick="closePv()">Close</button></div><div id="sheet">${sheet(cur)}</div>`;$('#pv').hidden=false;hpush();fitZoom();$('#pv').scrollTop=0}
 
 /* ---------- cloud sync (Firebase) ---------- */
 const cloud=()=>window.CLOUD&&CLOUD.user?CLOUD:null;
-let offline=false;
-const sq={};let sn=0;
-function push(id){const c=cloud();if(!c)return;const a=S.q[id];if(!a)return;const my=sq[id]=++sn,d=S.docs.find(x=>x.id==id);
+let offline=false,cfgOK=false,lastSig='';
+const SYNC={err:null,last:0,lt:0},sq={},cfgF={};let lastP={},pt=0;
+const cj=o=>{try{return JSON.stringify(o,Object.keys(o||{}).sort())}catch(e){return ''}};
+const HINT={'permission-denied':'Firestore security rules are rejecting the app. Open "Fix Firestore rules" below, paste the rules in the Firebase console, press Publish, wait a minute, then press Sync now.',
+'unauthenticated':'Your sign-in is no longer valid. Sign out, then sign in again.',
+'unavailable':'Cannot reach Firebase (offline, or the network is blocking it). Your work is kept on this device and uploads automatically when the connection returns.',
+'timeout':'No answer from Firebase (offline or blocked). Your work is kept and will upload later.',
+'not-found':'The Firestore database has not been created yet. In the Firebase console open Build > Firestore Database and press Create database, then set the rules below.',
+'invalid-argument':'Firestore refused the data (an image may be too large). Try a smaller logo or signature.',
+'resource-exhausted':'The free Firebase quota for today is used up. It resets daily.',
+'failed-precondition':'Firestore is not ready (database mode or setup). Check the Firebase console.',
+'no-user':'You are not signed in.'};
+function syncUi(){renderSide();const el=$('#cloudCard'),ae=document.activeElement;if(el&&!(ae&&el.contains(ae)))el.innerHTML=cloudCardHTML()}
+function syncOK(){SYNC.err=null;SYNC.last=Date.now();syncUi()}
+function syncFail(e){const k=String(e&&e.code||'error').replace(/^firestore\//,'');SYNC.err={code:k,msg:errM(e)};
+ if(Date.now()-SYNC.lt>20000){SYNC.lt=Date.now();toast(k=='permission-denied'?'Cloud save blocked by Firestore rules - open Settings > Cloud sync to fix it':'Cloud sync problem: '+k,5000)}
+ syncUi()}
+window.cloudErr=syncFail;
+// one in-flight write per document, with backoff - a rejected write must NOT be retried on every snapshot
+function meta(id){return sq[id]||(sq[id]={busy:0,ver:0,fails:0,next:0})}
+function push(id,force){const c=cloud();if(!c)return;const a=S.q[id];if(!a)return;const m=meta(id);
+ if(m.busy||(!force&&Date.now()<m.next))return;
+ m.busy=1;const v=m.ver,d=S.docs.find(x=>x.id==id);
  const p=a=='d'?c.delDoc(id):(d?c.saveDoc(d):Promise.resolve());
- p.then(()=>{if(sq[id]===my){delete S.q[id];loc()}}).catch(cerr)}
-function mark(id,a){S.q[id]=a;loc();push(id)}
-function cerr(e){const k=e&&e.code||'';toast(k=='permission-denied'?'Cloud blocked by Firestore rules - check the rules in Firebase console':'Cloud sync error: '+(k||errM(e)),4500)}
-window.cloudErr=cerr;
+ p.then(()=>{m.busy=0;m.fails=0;m.next=0;if(m.ver===v){delete S.q[id];loc()}else push(id,1);syncOK()},
+  e=>{m.busy=0;m.fails++;m.next=Date.now()+Math.min(300000,(e&&e.code=='permission-denied'?30000:5000)*Math.pow(2,m.fails-1));syncFail(e)})}
+function mark(id,a){const m=meta(id);m.ver++;m.next=0;S.q[id]=a;loc();push(id)}
+function flushQ(force){Object.keys(S.q).forEach(id=>push(id,force))}
 const parts=()=>{const {sig,logo,...rest}=S.set;return{company:rest,signature:{v:sig||'none'},logo:{v:logo||'none'}}};
-let lastP={},pt=0;
-function pushSet(){const c=cloud();if(!c)return;const P=parts();for(const k in P){const j=JSON.stringify(P[k]);if(lastP[k]!==j){lastP[k]=j;c.saveCfg(k,P[k]).catch(e=>{lastP[k]=null;cerr(e)})}}}
-function pushSetSoon(){if(!cloud())return;clearTimeout(pt);pt=setTimeout(pushSet,900)}
-window.cloudDocs=function(l){
+function pushSet(){const c=cloud();if(!c||!cfgOK)return;const P=parts();
+ for(const k in P){const j=cj(P[k]);if(lastP[k]===j||cfgF[k])continue;cfgF[k]=1;
+  c.saveCfg(k,P[k]).then(()=>{cfgF[k]=0;lastP[k]=j;if(cj(parts()[k])!==j)pushSetSoon();syncOK()},e=>{cfgF[k]=0;syncFail(e);pushSetSoon(20000)})}}
+function pushSetSoon(ms){if(!cloud())return;clearTimeout(pt);pt=setTimeout(pushSet,ms||900)}
+function syncNow(){if(!cloud()){toast('Sign in first');return}flushQ(true);pushSet();toast('Syncing…')}
+function refreshDrafts(){const s=S.set;['i','q'].forEach(t=>{const d=dr[t];if(d&&!d.id&&!d.nm)d.no=t=='i'?s.ip+pad(s.in):s.qp+pad(s.qn)})}
+window.cloudDocs=function(l,fromCache){
+ l=(l||[]).filter(d=>d&&Number.isFinite(+d.id)&&Array.isArray(d.items)&&(d.t=='i'||d.t=='q')).map(d=>Object.assign(d,{id:+d.id,date:d.date||'',client:d.client||'',no:d.no||'',terms:d.terms||'',notes:d.notes||''}));
+ if(fromCache&&!l.length&&S.docs.length)return;           // an empty offline cache must never wipe the local list
  const m=new Map(l.map(d=>[String(d.id),d]));
- if(!S.mig){S.docs.forEach(d=>S.q[d.id]='s');S.mig=1}
+ if(!S.mig){S.docs.forEach(d=>{S.q[d.id]=S.q[d.id]||'s'});S.mig=1}   // first sign-in: upload what is already on this device
  for(const [id,a] of Object.entries(S.q)){if(a=='d')m.delete(id);else{const d=S.docs.find(x=>x.id==id);if(d)m.set(id,d)}}
- S.docs=[...m.values()];loc();
- Object.keys(S.q).forEach(push);
- if(tab=='h')render();else renderSide()};
-window.cloudCfg=function(o,pending){
- if(!o.company){pushSet();return}
- if(pending)return;
- const keep={sig:S.set.sig,logo:S.set.logo};
- S.set=Object.assign({},D,S.set,o.company,keep);
- if(o.signature&&o.signature.v!=null)S.set.sig=o.signature.v;
- if(o.logo&&o.logo.v!=null)S.set.logo=o.logo.v;
- const P=parts();for(const k in P)lastP[k]=JSON.stringify(P[k]);
- loc();
- const ae=document.activeElement;
- if(tab=='s'&&!(ae&&/INPUT|TEXTAREA/.test(ae.tagName)))render();else renderSide()};
+ S.docs=[...m.values()];loc();flushQ(false);
+ const sg=JSON.stringify(S.docs.map(d=>[d.id,d.no,d.client,d.date,tot(d),!!S.q[d.id]])),ch=sg!==lastSig;lastSig=sg;
+ if(ch&&tab=='h')render();else renderSide()};
+window.cloudCfg=function(o,fromCache){
+ if(!o.company){if(fromCache)return;cfgOK=true;pushSet();return}      // first device ever: seed the cloud with local settings
+ cfgOK=true;const before=cj(S.set);
+ if(!cfgF.company){S.set=Object.assign({},D,S.set,o.company,{sig:S.set.sig,logo:S.set.logo});lastP.company=cj(o.company)}
+ if(o.signature&&o.signature.v!=null&&!cfgF.signature){S.set.sig=o.signature.v;lastP.signature=cj(o.signature)}
+ if(o.logo&&o.logo.v!=null&&!cfgF.logo){S.set.logo=o.logo.v;lastP.logo=cj(o.logo)}
+ refreshDrafts();loc();
+ {const ae=document.activeElement,typing=ae&&/INPUT|TEXTAREA/.test(ae.tagName);
+  if(cj(S.set)!==before&&!typing&&(tab=='s'||tab=='i'||tab=='q'))render();else renderSide()}
+ pushSet()};
 window.cloudChanged=function(){const c=window.CLOUD;
- if(c&&!c.user)lastP={};
+ cfgOK=false;lastP={};lastSig='';Object.keys(cfgF).forEach(k=>delete cfgF[k]);Object.keys(sq).forEach(k=>delete sq[k]);SYNC.err=null;
  if(c&&c.user)offline=false;
  $('#login').hidden=!c||!!c.user||offline;
  $('#lgl').innerHTML=logoSrc()?`<img src="${logoSrc()}" alt="">`:`<b>${E(S.set.co)}</b>`;
- renderSide()};
+ renderSide();if(tab=='s')render()};
 function useOffline(){offline=true;$('#login').hidden=true;renderSide()}
-function showLogin(){offline=false;$('#login').hidden=false}
-const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'That email address is not valid.','auth/user-not-found':'No account with that email.','auth/wrong-password':'Wrong email or password.','auth/too-many-requests':'Too many attempts. Wait a few minutes and try again.','auth/network-request-failed':'No internet connection.','auth/operation-not-allowed':'Email/Password sign-in is not enabled in the Firebase console (Authentication > Sign-in method).','auth/user-disabled':'This account is disabled.'}[e&&e.code]||('Sign-in failed: '+(e&&e.code||errM(e))));
+function showLogin(){offline=false;$('#login').hidden=false;menu(false)}
+const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'That email address is not valid.','auth/user-not-found':'No account with that email.','auth/wrong-password':'Wrong email or password.','auth/too-many-requests':'Too many attempts. Wait a few minutes and try again.','auth/network-request-failed':'No internet connection (or Firebase is blocked on this network).','auth/operation-not-allowed':'Email/Password sign-in is not enabled in the Firebase console (Authentication > Sign-in method).','auth/user-disabled':'This account is disabled.','auth/unauthorized-domain':'This website address is not allowed in Firebase. Add it under Authentication > Settings > Authorized domains.','auth/operation-not-supported-in-this-environment':'Sign-in does not work when the app is opened as a file. Open it from a web address (https://...).','auth/api-key-not-valid.-please-pass-a-valid-api-key.':'The Firebase API key was rejected.','auth/invalid-api-key':'The Firebase API key was rejected.','auth/internal-error':'Firebase had an internal error. Try again.'}[e&&e.code]||('Sign-in failed: '+(e&&e.code||errM(e))));
 async function doLogin(ev){ev.preventDefault();const f=ev.target,b=f.querySelector('button[type=submit]');$('#lerr').textContent='';b.disabled=true;b.textContent='Signing in…';
  try{await CLOUD.login(f.em.value.trim(),f.pw.value);f.pw.value=''}catch(e){$('#lerr').textContent=authMsg(e)}
  b.disabled=false;b.textContent='Sign in';return false}
+function rulesTxt(){const em=((window.CLOUD&&CLOUD.user&&CLOUD.user.email)||'you@example.com').toLowerCase();
+return `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function allowed() {
+      return request.auth != null
+        && request.auth.token.email in ['${em}'];
+    }
+    match /invoices/{id} { allow read, write: if allowed(); }
+    match /config/{id}   { allow read, write: if allowed(); }
+  }
+}`}
+function copyRules(){const t=rulesTxt();const ok=()=>toast('Rules copied');
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>fb());else fb();
+ function fb(){const r=document.createRange();r.selectNodeContents($('#rulesPre'));const s=getSelection();s.removeAllRanges();s.addRange(r);try{document.execCommand('copy');ok()}catch(e){toast('Select the text and copy it')}}}
+function cloudCardHTML(){const c=window.CLOUD,u=c&&c.user,q=Object.keys(S.q).length;
+ if(!c)return `<h3>Cloud sync</h3><p class="note warn">Cloud sync is not running: ${E(window.CLOUD_ERR||'the Firebase scripts could not be loaded (check the internet connection).')}</p>${location.protocol=='file:'?'<p class="note">This page is open as a file. Cloud sign-in only works when the app is opened from a web address (https://...). Put index.html on Firebase Hosting, Netlify or GitHub Pages.</p>':''}`;
+ if(!u)return `<h3>Cloud sync</h3><p class="note">Not signed in - data is saved on this device only.</p><button class="b p" onclick="showLogin()">Sign in</button>`;
+ const e=SYNC.err;
+ return `<h3>Cloud sync</h3>
+<div class="kvs"><div><span>Status</span><b class="${e?'bad':'good'}">${e?'Problem: '+E(e.code):(q?'Uploading '+q+' item(s)…':'Up to date')}</b></div>
+<div><span>Signed in as</span><b>${E(u.email)}</b></div><div><span>Project</span><b>${E(c.projectId)}</b></div>
+<div><span>Waiting to upload</span><b>${q}</b></div><div><span>Last upload</span><b>${SYNC.last?new Date(SYNC.last).toLocaleTimeString():'-'}</b></div></div>
+${e?`<p class="note warn">${E(HINT[e.code]||e.msg)}</p>`:''}
+<div class="bar"><button class="b s" onclick="runDiag()">Test connection</button><button class="b s" onclick="syncNow()">Sync now</button><button class="b s" onclick="CLOUD.logout()">Sign out</button></div>
+<div id="diagOut"></div>
+<details${e&&e.code=='permission-denied'?' open':''}><summary>Fix Firestore rules</summary>
+<ol class="st"><li>Open the Firebase console, then <b>Build &gt; Firestore Database &gt; Rules</b>.</li><li>Replace everything there with the rules below, then press <b>Publish</b>.</li><li>Wait about a minute, come back and press <b>Test connection</b>.</li></ol>
+<pre id="rulesPre">${E(rulesTxt())}</pre><button class="b s" onclick="copyRules()">Copy rules</button>
+<p class="note">These rules let only the account you are signed in with read and write the invoices and settings. To allow more people, add their emails (lowercase) inside the [ ].</p></details>`}
+async function runDiag(){const o=$('#diagOut');if(!o)return;o.innerHTML='<p class="note">Testing - this takes a few seconds…</p>';
+ let r;try{r=await CLOUD.diag()}catch(e){o.innerHTML=`<p class="note warn">${E(errM(e))}</p>`;return}
+ const bad=r.out.find(s=>!s.ok);
+ o.innerHTML='<ul class="dg">'+r.out.map(s=>`<li class="${s.ok?'ok':'no'}"><b>${s.ok?'✓':'✕'} ${E(s.name)}</b><span>${s.ok?E(s.note):E((s.code?s.code+': ':'')+s.msg)}</span></li>`).join('')+'</ul>'+
+  (bad?`<p class="note warn">${E(HINT[bad.code]||bad.msg)}</p>`:'<p class="note">All good - saving to the cloud is allowed.</p>');
+ if(!bad)syncNow()}
+
+/* ---------- mobile: gestures, keys, drafts that survive the browser killing the tab ---------- */
+let tx0=0,ty0=0,dtm=0;
+addEventListener('touchstart',e=>{const t=e.touches[0];tx0=t.clientX;ty0=t.clientY},{passive:true});
+addEventListener('touchend',e=>{if(!document.body.classList.contains('open'))return;const t=e.changedTouches[0];if(t.clientX-tx0<-70&&Math.abs(t.clientY-ty0)<60)menu(false)},{passive:true});
+document.addEventListener('keydown',e=>{if(e.key=='Escape'){if(!$('#pv').hidden)closePv();else menu(false)}});
+document.addEventListener('input',()=>{clearTimeout(dtm);dtm=setTimeout(loc,500)},true);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)loc()});
+addEventListener('pagehide',loc);
+addEventListener('resize',fitZoom);
+addEventListener('online',()=>{flushQ(true);pushSet()});
+setInterval(()=>{if(cloud())flushQ(false)},15000);
 
 go('i');
 </script></body></html>
